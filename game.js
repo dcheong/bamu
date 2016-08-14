@@ -21,6 +21,11 @@ document.onmousemove = function(e) {
   mouseY = e.clientY;
 }
 
+document.onclick = function(e) {
+  drawOnPlanet(s, sceneCanvas);
+  sceneChange = true;
+}
+
 window.onload = function() {
   init();
   setInterval(function() {
@@ -92,8 +97,15 @@ function drawOnPlanet(context, canvas) {
   var centerY = canvas.height/2;
   var diffX = mouseX - centerX;
   var diffY = mouseY - centerY;
+  var hyp = Math.sqrt(diffX^2 + diffY^2);
   var angle = Math.atan(diffY/diffX);
+  angle = angle - Math.PI/2;
+  if (diffX > 0) {
+    angle = angle + Math.PI;
+  }
+  context.translate(centerX, centerY);
   context.rotate(angle);
-  context.drawImage(tree, centerX, centerY);
+  context.drawImage(tree, 0, -70 - tree.naturalHeight);
   context.rotate(-angle);
+  context.translate(-centerX, -centerY);
 }
