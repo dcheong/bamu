@@ -65,6 +65,8 @@ function updateScene() {
 
 function updateUI() {
   drawUI();
+  drawOnPlanet(u, uiCanvas);
+
 }
 
 function drawScene() {
@@ -88,5 +90,10 @@ function drawUI() {
 function drawOnPlanet(context, canvas) {
   var centerX = canvas.width/2;
   var centerY = canvas.height/2;
-  context.drawImage(tree, )
+  var diffX = mouseX - centerX;
+  var diffY = mouseY - centerY;
+  var angle = Math.atan(diffY/diffX);
+  context.rotate(angle);
+  context.drawImage(tree, centerX, centerY);
+  context.rotate(-angle);
 }
