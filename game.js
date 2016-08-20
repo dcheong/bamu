@@ -16,10 +16,7 @@ var loaded;
 var tree;
 
 
-document.onmousemove = function(e) {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-}
+
 
 document.onclick = function(e) {
   drawOnPlanet(s, sceneCanvas);
@@ -32,6 +29,11 @@ window.onload = function() {
     updateScene();
     updateUI();
   }, 1000/60);
+  document.getElementById("ui").onmousemove = function(e) {
+    console.log('mouse move');
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }
 }
 
 function init() {
@@ -39,14 +41,14 @@ function init() {
 
   sceneCanvas = document.getElementById('scene');
   s = sceneCanvas.getContext('2d');
-  s.canvas.width = window.innerWidth;
+  s.canvas.width = window.innerWidth * 0.75;
   s.canvas.height = window.innerHeight;
   console.log('scene-main initialized');
   sceneChange = true;
 
   uiCanvas = document.getElementById('ui');
   u = uiCanvas.getContext('2d');
-  u.canvas.width = window.innerWidth;
+  u.canvas.width = window.innerWidth * 0.75;
   u.canvas.height = window.innerHeight;
   console.log('scene-ui initialized');
 
@@ -85,11 +87,6 @@ function drawScene() {
 
 function drawUI() {
   u.clearRect(0,0,u.canvas.width, u.canvas.height);
-  u.beginPath();
-  u.arc(mouseX, mouseY, 5, 0, 2*Math.PI, false);
-  u.lineWidth = 3;
-  u.strokeStyle = '#000000';
-  u.stroke();
 }
 
 function drawOnPlanet(context, canvas) {
@@ -99,6 +96,9 @@ function drawOnPlanet(context, canvas) {
   var diffY = mouseY - centerY;
   var hyp = Math.sqrt(diffX^2 + diffY^2);
   var angle = Math.atan(diffY/diffX);
+  if (diffX == 0) {
+    angle = Math.PI/2;
+  }
   angle = angle - Math.PI/2;
   if (diffX > 0) {
     angle = angle + Math.PI;
