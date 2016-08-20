@@ -50,6 +50,7 @@ function init() {
   u = uiCanvas.getContext('2d');
   u.canvas.width = window.innerWidth * 0.75;
   u.canvas.height = window.innerHeight;
+  u.globalAlpha=(0.5)
   console.log('scene-ui initialized');
 
   mouseX = 0;
@@ -73,7 +74,9 @@ function updateScene() {
 function updateUI() {
   drawUI();
   drawOnPlanet(u, uiCanvas);
+}
 
+function drawBG(context) {
 }
 
 function drawScene() {
