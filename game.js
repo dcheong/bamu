@@ -40,9 +40,25 @@ window.onload = function() {
   };
 
   document.getElementById("ui").onclick = function(e) {
-    drawOnPlanet(s, sceneCanvas);
+    drawOnPlanet(s,
+      sceneCanvas,
+      calcAngleToPosition(
+        sceneCanvas.width/2,
+        sceneCanvas.height/2,
+        mouseX, mouseY
+        )
+      );
     sceneChange = true;
   };
+
+  document.addEventListener("keypress", function(e) {
+    switch (e.key) {
+      case 'r':
+        randomize(50);
+        break;
+      default:
+    }
+  });
 }
 
 function init() {
@@ -95,7 +111,14 @@ function updateScene() {
 
 function updateUI() {
   drawUI();
-  drawOnPlanet(u, uiCanvas);
+  drawOnPlanet(u,
+      uiCanvas,
+      calcAngleToPosition(
+        uiCanvas.width/2,
+        uiCanvas.height/2,
+        mouseX, mouseY
+        )
+      );
 }
 
 function drawBG(context) {
@@ -114,12 +137,9 @@ function drawUI() {
   u.clearRect(0,0,u.canvas.width, u.canvas.height);
 }
 
-function drawOnPlanet(context, canvas) {
-  var image = images[currentIndex];
-  var centerX = canvas.width/2;
-  var centerY = canvas.height/2;
-  var diffX = mouseX - centerX;
-  var diffY = mouseY - centerY;
+function calcAngleToPosition(x1, y1, x2, y2) {
+  var diffX = x2 - x1;
+  var diffY = y2-y1;
   var hyp = Math.sqrt(diffX^2 + diffY^2);
   var angle = Math.atan(diffY/diffX);
   if (diffX == 0) {
@@ -129,6 +149,22 @@ function drawOnPlanet(context, canvas) {
   if (diffX > 0) {
     angle = angle + Math.PI;
   }
+  return angle;
+}
+
+function randomize(population) {
+  for (var i = 0; i < population; i++) {
+    var randAngle = Math.random() * 2 * Math.PI;
+    currentIndex = Math.floor(Math.random() * images.length);
+    console.log(currentIndex)
+    drawOnPlanet(s, sceneCanvas, randAngle);
+  }
+}
+
+function drawOnPlanet(context, canvas, angle) {
+  var image = images[currentIndex];
+  centerX = canvas.width/2;
+  centerY = canvas.height/2;
   context.translate(centerX, centerY);
   context.rotate(angle);
   context.drawImage(image, 0, -radius - image.naturalHeight);
