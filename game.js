@@ -13,27 +13,36 @@ var mouseY;
 
 var loaded;
 
-var tree;
+var textures = [
+  './img/tree.png',
+  './img/tree2.png'
+];
 
+var images = [];
 
+var currentIndex = 0;
 
+var radius = 70;
 
-document.onclick = function(e) {
-  drawOnPlanet(s, sceneCanvas);
-  sceneChange = true;
-}
 
 window.onload = function() {
   init();
   setInterval(function() {
-    updateScene();
-    updateUI();
+    if (loaded) {
+      updateScene();
+      updateUI();
+    }
   }, 1000/60);
+  
   document.getElementById("ui").onmousemove = function(e) {
-    console.log('mouse move');
     mouseX = e.clientX;
     mouseY = e.clientY;
-  }
+  };
+
+  document.getElementById("ui").onclick = function(e) {
+    drawOnPlanet(s, sceneCanvas);
+    sceneChange = true;
+  };
 }
 
 function init() {
@@ -58,10 +67,23 @@ function init() {
 
   loaded = false;
 
-  tree = new Image();
-  tree.src = './img/tree.png';
-  tree.onload = function () {
-    loaded = true;
+  for (var i = 0; i < textures.length; i++) {
+    console.log(textures.length);
+    var path = textures[i];
+    var id = 'object-' + i;
+    var toAppend = $('<img id="' + id + '" src=' + path + '></img>');
+    $(toAppend).on('click', function(e) {
+      currentIndex = e.target.id.split('-')[1];
+    });
+    $('#control-table').append(toAppend);
+    var temp = new Image();
+    temp.src = path;
+    images.push(temp);
+    if (i === textures.length - 1) {
+      temp.onload = function () {
+        loaded = true;
+      }
+    }
   }
 }
 
@@ -93,6 +115,7 @@ function drawUI() {
 }
 
 function drawOnPlanet(context, canvas) {
+  var image = images[currentIndex];
   var centerX = canvas.width/2;
   var centerY = canvas.height/2;
   var diffX = mouseX - centerX;
@@ -108,7 +131,7 @@ function drawOnPlanet(context, canvas) {
   }
   context.translate(centerX, centerY);
   context.rotate(angle);
-  context.drawImage(tree, 0, -70 - tree.naturalHeight);
+  context.drawImage(image, 0, -radius - image.naturalHeight);
   context.rotate(-angle);
   context.translate(-centerX, -centerY);
 }
