@@ -40,6 +40,6 @@ span {
 }
 
 img {
-  padding: 20px;
-  border: solid 1px black;
+  padding: 5px;
+  border: solid 1px rgba(0,0,0,0.2);
 }
