@@ -165,9 +165,9 @@ function drawOnPlanet(context, canvas, angle) {
   var image = images[currentIndex];
   centerX = canvas.width/2;
   centerY = canvas.height/2;
+  context.save();
   context.translate(centerX, centerY);
   context.rotate(angle);
   context.drawImage(image, 0, -radius - image.naturalHeight);
-  context.rotate(-angle);
-  context.translate(-centerX, -centerY);
+  context.restore();
 }
